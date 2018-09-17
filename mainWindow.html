@@ -1,83 +1,320 @@
 <html lang="en">
 
 <head>
-    <link rel="stylesheet" href="./node_modules/semantic-ui-css/semantic.min.css">
+    <link rel="stylesheet" href="./node_modules/materialize-css/dist/css/materialize.min.css">
     <link rel="stylesheet" href="./node_modules/leaflet/dist/leaflet.css">
     <link rel="stylesheet" href="./node_modules/leaflet.markercluster/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="./node_modules/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    <link rel="stylesheet" href="./node_modules/@fortawesome/fontawesome-free/css/all.min.css" />
     <link rel="stylesheet" href="./style.css">
-    <script>window.$ = window.jQuery = require('jquery');</script>
-    <script src="./node_modules/semantic-ui-css/semantic.min.js"></script>
+    <script>
+        window.$ = window.jQuery = require('jquery');
+    </script>
+    <!-- <script src="./node_modules/bootstrap/dist/js/bootstrap.bundle.min.js"></script> -->
     <title>Owl</title>
 </head>
 
 <body>
-    <nav>
-        <div class="ui icon compact menu">
-            <a class="item">
-                <img src="./data/assets/ui/eraser.png">
-            </a>
-            <a class="item">
-                <img src="./data/assets/ui/sort.png">
-            </a>
-            <div class="ui form item icon">
-                <div class="field">
-                    <div class="ui selection dropdown">
-                        <input type="hidden" name="gender">
-                        <i class="dropdown icon"></i>
-                        <div class="text">
-                            <img src="./data/assets/hint/move.png"> move
+    <nav class="navbar navbar-expand-sm navbar-dark bg-dark">
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#toolbox" aria-controls="toolbox"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="toolbox">
+            <ul class="navbar-nav">
+                <li class="nav-item mx-1">
+                    <form class="form-inline my-0" style="height: 30px;">
+                        <select class="form-control bg-dark text-white" id="type">
+                            <option data-array-type="path" data-type="move">déplacement</option>
+                            <option data-array-type="path" data-type="gather">récolte</option>
+                            <option data-array-type="path" data-type="fight">combat</option>
+                            <option data-array-type="bank" data-type="bank">banque / maison</option>
+                            <option data-array-type="phoenix" data-type="phoenix">phoenix</option>
+                        </select>
+                    </form>
+                </li>
+                <li class="nav-item mx-1">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-dark" title="haut">
+                            <input type="checkbox">
+                            <i class="fas fa-arrow-up"></i>
+                        </label>
+                    </div>
+                </li>
+                <li class="nav-item mx-1">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-dark" title="bas">
+                            <input type="checkbox">
+                            <i class="fas fa-arrow-down"></i>
+                        </label>
+                    </div>
+                </li>
+                <li class="nav-item mx-1">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-dark" title="gauche">
+                            <input type="checkbox">
+                            <i class="fas fa-arrow-left"></i>
+                        </label>
+                    </div>
+                </li>
+                <li class="nav-item mx-1">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-dark" title="droite">
+                            <input type="checkbox">
+                            <i class="fas fa-arrow-right"></i>
+                        </label>
+                    </div>
+                </li>
+                <li class="nav-item mx-1">
+                    <div class="btn-group-toggle" data-toggle="buttons">
+                        <label class="btn btn-dark" title="supprimer">
+                            <input type="checkbox">
+                            <i class="fas fa-eraser"></i>
+                        </label>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        <button class="btn btn-dark" data-toggle="modal" data-target="#setting">
+            <i class="fas fa-cog"></i>
+        </button>
+    </nav>
+    <div id="map"> </div>
+    <div class="modal fade" id="setting" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" style="max-width: 900px;" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Paramètre</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <nav>
+                        <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-profile-tab" data-toggle="tab" href="#nav-gather"
+                                role="tab" aria-controls="nav-profile" aria-selected="false">Récolte</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-fight" role="tab"
+                                aria-controls="nav-contact" aria-selected="false">Combat</a>
+                            <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-bank" role="tab"
+                                aria-controls="nav-contact" aria-selected="false">Banque</a>
                         </div>
-                        <div class="menu">
-                            <div class="item selected">
-                                <img src="./data/assets/hint/move.png"> move
-                            </div>
-                            <div class="item">
-                                <img src="./data/assets/hint/gather.png"> gather
-                            </div>
-                            <div class="item">
-                                <img src="./data/assets/hint/fight.png"> fight
-                            </div>
-                            <div class="item">
-                                <img src="./data/assets/hint/401.png"> bank / home
-                            </div>
-                            <div class="item">
-                                <img src="./data/assets/hint/phoe.png"> phoenix
-                            </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-gather" role="tabpanel" aria-labelledby="nav-home-tab">
+                            <form>
+                                <div class="checkbox checbox-switch switch-primary">
+                                    <label>
+                                        <input type="checkbox" id="DISPLAY_GATHER_COUNT" checked="true">
+                                        <span></span>
+                                        Afficher le compteur de récoltes
+                                    </label>
+                                </div>
+                                <div class="checkbox checbox-switch switch-primary">
+                                    <label>
+                                        <input type="checkbox" id="OPEN_BAGS" checked="true">
+                                        <span></span>
+                                        ouverture automatique des sacs de récolte
+                                    </label>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlInput1">Ressource a récolter</label>
+                                    <input type="email" class="form-control dropdown-toggle" data-toggle="dropdown" id="exampleFormControlInput1"
+                                        placeholder="Chercher ...">
+                                    <div class="dropdown-menu p-4" style="max-width: 500px;">
+                                        <p>
+                                            Some example text that's free-flowing within the dropdown menu.
+                                        </p>
+                                        <p class="mb-0">
+                                            And this is more example text.
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
                         </div>
+                        <div class="tab-pane fade" id="nav-fight" role="tabpanel" aria-labelledby="nav-profile-tab">
+                            <form>
+                                <div class="checkbox checbox-switch mb-3 switch-primary">
+                                    <label>
+                                        <input type="checkbox" id="DISPLAY_FIGHT_COUNT" checked="true" />
+                                        <span></span>
+                                        Afficher le compteur de combats
+                                    </label>
+                                </div>
+                                <div class="card mb-3">
+                                    <div class="card-body">
+                                        <div class="card-title">
+                                            <div class="checkbox checbox-switch switch-primary">
+                                                <label>
+                                                    <input type="checkbox" id="AUTO_REGEN" checked="true">
+                                                    <span></span>
+                                                    Activer la régénération de vie automatique
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="card-text">
+                                            <!-- <form> -->
+                                            <fieldset>
+                                                <div class="form-group row">
+                                                    <label class="col-2 mt-2" for="minLifeRange">Vie minimum</label>
+                                                    <input type="range" class="custom-range col-8" min="0" max="100"
+                                                        step="1" value="80" id="minLifeRange">
+                                                    <div class="input-group col-2">
+                                                        <input class="form-control" min="0" max="100" value="80" type="number"
+                                                            id="minLifeRangeDisplay">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-2 mt-2" for="maxLifeRange">Vie maximum</label>
+                                                    <input type="range" class="custom-range col-8" min="0" max="100"
+                                                        step="1" value="100" id="maxLifeRange">
+                                                    <div class="input-group col-2">
+                                                        <input class="form-control" min="0" max="100" value="100" type="number"
+                                                            id="maxLifeRangeDisplay">
+                                                        <div class="input-group-append">
+                                                            <span class="input-group-text">%</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-3 mt-2">
+                                                        Items pour se régénérer
+                                                    </label>
+                                                    <input type="text" class="form-control col-9 dropdown-toggle"
+                                                        data-toggle="dropdown" id="regenItems" placeholder="Chercher ...">
+                                                    <div class="dropdown-menu p-4" style="max-width: 500px;">
+                                                        <p>
+                                                            Some example text that's free-flowing within the dropdown
+                                                            menu.
+                                                        </p>
+                                                        <p class="mb-0">
+                                                            And this is more example text.
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label class="col-5 mt-2">Nombre d'items a prendre en banque</label>
+                                                    <div class="input-group col-2 offset-5">
+                                                        <input class="form-control" min="0" value="0" type="number" id="regenItemsToTake">
+                                                    </div>
+                                                </div>
+                                        </div>
+                                        </fieldset>
+                                        <!-- </form> -->
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-6 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="MIN_MONSTERS" checked="true">
+                                            <span></span>
+                                            Nombre de monstres minimum à attaquer
+                                        </label>
+                                    </div>
+                                    <input type="range" class="custom-range col-5" min="1" max="8" step="1" value="1"
+                                        id="minMonsterRange">
+                                    <input class="col-1 form-control" min="1" max="8" value="1" type="number" id="minMonsterRangeDisplay">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-6 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="MAX_MONSTERS" checked="true">
+                                            <span></span>
+                                            Nombre de monstres maximum à attaquer
+                                        </label>
+                                    </div>
+                                    <input type="range" class="custom-range col-5" min="1" max="8" step="1" value="8"
+                                        id="maxMonsterRange">
+                                    <input class="col-1 form-control" min="1" max="8" value="8" type="number" id="maxMonsterRangeDisplay">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-10 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="MIN_MONSTERS_LEVEL" checked="true">
+                                            <span></span>
+                                            Niveau minimum d’un groupe de monstres à attaquer
+                                        </label>
+                                    </div>
+                                    <input class="col-2 form-control" min="1" value="1" type="number" id="minMonsterLevel">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-10 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="MAX_MONSTERS_LEVEL" checked="true">
+                                            <span></span>
+                                            Niveau maximum d’un groupe de monstres à attaquer
+                                        </label>
+                                    </div>
+                                    <input class="col-2 form-control" min="1" value="1000" type="number" id="maxMonsterLevel">
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-4 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="MANDATORY_MONSTERS" checked="true">
+                                            <span></span>
+                                            Monstres obligatoires
+                                        </label>
+                                    </div>
+                                    <input type="text" class="form-control col-8 dropdown-toggle" data-toggle="dropdown"
+                                        id="exampleFormControlInput1" placeholder="Chercher ...">
+                                    <div class="dropdown-menu p-4" style="max-width: 500px;">
+                                        <p>
+                                            Some example text that's free-flowing within the dropdown menu.
+                                        </p>
+                                        <p class="mb-0">
+                                            And this is more example text.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <div class="checkbox col-4 checbox-switch switch-primary px-3">
+                                        <label class="mt-2">
+                                            <input type="checkbox" id="FORBIDDEN_MONSTERS" checked="true">
+                                            <span></span>
+                                            Monstres interdits
+                                        </label>
+                                    </div>
+                                    <input type="text" class="form-control col-8 dropdown-toggle" data-toggle="dropdown"
+                                        id="exampleFormControlInput1" placeholder="Chercher ...">
+                                    <div class="dropdown-menu p-4" style="max-width: 500px;">
+                                        <p>
+                                            Some example text that's free-flowing within the dropdown menu.
+                                        </p>
+                                        <p class="mb-0">
+                                            And this is more example text.
+                                        </p>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="tab-pane fade" id="nav-bank" role="tabpanel" aria-labelledby="nav-contact-tab">...</div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
             </div>
-            <a class="item">
-                <img src="./data/assets/hint/up.png">
-            </a>
-            <a class="item">
-                <img src="./data/assets/hint/down.png">
-            </a>
-            <a class="item">
-                <img src="./data/assets/hint/left.png">
-            </a>
-            <a class="item">
-                <img src="./data/assets/hint/right.png">
-            </a>
         </div>
-    </nav>
-    <div id="map" style="position: fixed!important;">
+    </div>
     </div>
 </body>
 
 <script src="./plugins/map.js"></script>
 
 <script>
-    $('.ui.selection.dropdown').dropdown();
-    $('a.item').on('click', (e) => {
-        if ($(e.currentTarget.className).hasClass('toggled')) {
-            $(e.currentTarget).toggleClass('toggled')
-        } else {
-            $(e.currentTarget).toggleClass('toggled')
-        }
-        console.log(e);
-    })
+    // $('.ui.selection.dropdown').dropdown();
+    // $('a.item').on('click', (e) => {
+    //     if ($(e.currentTarget.className).hasClass('toggled')) {
+    //         $(e.currentTarget).toggleClass('toggled')
+    //     } else {
+    //         $(e.currentTarget).toggleClass('toggled')
+    //     }
+    //     console.log(e);
+    // })
 </script>
 
 </html>
